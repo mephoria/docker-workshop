@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  app_backend:
+    build:
+      context: ./backend
+    volumes:
+      - "./backend/history.log:/backend/history.log"
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    networks:
+      - app
+
+  app_frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+    depends_on:
+      - app_backend
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
